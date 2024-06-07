@@ -1,10 +1,34 @@
 -- ADD SQL COMMANDS HERE --
+PRAGMA foreign_keys = ON;
+
+DROP TABLE IF EXISTS favorite_snacks;
+DROP TABLE IF EXISTS lists;
 DROP TABLE IF EXISTS snacks;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    username VARCHAR(40) UNIQUE NOT NULL,
+    bio TEXT(1000)
+);
 
 CREATE TABLE snacks (
     id INTEGER PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     name VARCHAR(40) NOT NULL,
     type VARCHAR(25) NOT NULL,
     description TEXT(1000),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+CREATE TABLE lists (
+    id INTEGER PRIMARY KEY,
+    title VARCHAR(50) UNIQUE NOT NULL,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE favorite_snacks (
+    id INTEGER PRIMARY KEY,
+    snack_id INTEGER REFERENCES snacks(id) ON DELETE CASCADE,
+    list_id INTEGER REFERENCES lists(id) ON DELETE CASCADE
 );
